@@ -9,17 +9,19 @@ import { IStatus } from "../user/user.interface";
 export const getSummaryByDate = async (req: Request, res: Response) => {
   try {
     const payload = req.params;
+    // console.log(payload)
     const date = new Date(payload?.date).toLocaleDateString("en-GB", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
     });
+    // console.log(date)
     const summaryExists = await Summary.findOne({ date: date });
     if (!summaryExists) {
-      throw new AppError(httpStatus.BAD_REQUEST, "Summary does not exist.");
+      throw new AppError(httpStatus.BAD_REQUEST, "Summary does not exist for the date.");
     }
     sendResponse(res, {
-      success: true,
+      success: false,
       statusCode: httpStatus.CREATED,
       message: "Summary fetch successful.",
       data: summaryExists,
