@@ -9,11 +9,7 @@ import { IStatus } from "../user/user.interface";
 export const getSummaryByDate = async (req: Request, res: Response) => {
   try {
     const payload = req.params;
-    const date = new Date(payload?.date).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+    const date = String(new Date(payload?.date).toLocaleDateString('en-GB').split('/').join('-'));
     const summaryExists = await Summary.findOne({ date: date });
     if (!summaryExists) {
       throw new AppError(httpStatus.BAD_REQUEST, "Summary does not exist.");
@@ -32,11 +28,7 @@ export const getSummaryByDate = async (req: Request, res: Response) => {
 
 export const getSummary = async (req: Request, res: Response) => {
   try {
-    const date = new Date(Date.now()).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+    const date = new Date(Date.now()).toLocaleDateString('en-GB').split('/').join('-');
     const summaryExists = await Summary.findOne({ date: date });
     if (summaryExists) {
       sendResponse(res, {

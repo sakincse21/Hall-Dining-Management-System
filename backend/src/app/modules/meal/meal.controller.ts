@@ -10,11 +10,9 @@ export const createMeal = async (req: Request, res: Response) => {
     const { meals, items, type } = req.body;
     let totalCost = 0;
     items?.forEach((item: IItem) => (totalCost += item.price * item.quantity));
-    const date = new Date(Date.now()).toLocaleDateString("en-GB", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      })
+    const date = String(new Date().toLocaleDateString('en-GB').split('/').join('-'));
+    // console.log(date);
+    
     const payload = {
       meals,
       items,
@@ -104,11 +102,8 @@ export const getMealByDate = async (req: Request, res: Response) => {
     if (!date) {
       throw new AppError(httpStatus.BAD_REQUEST, "A date is mandatory");
     }
-    const dateValue = new Date(date).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+    const dateValue = String(new Date(date).toLocaleDateString('en-GB').split('/').join('-'));
+    console.log(dateValue)
     const meal = await Meal.findOne({ date: dateValue });
     if (!meal) {
       throw new AppError(httpStatus.BAD_REQUEST, "Meal not found.");
